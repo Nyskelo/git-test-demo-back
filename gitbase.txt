@@ -1,0 +1,337 @@
+Git setup highlights 
+You can download git here: http://git-scm.com/downloads
+
+Install Git with default settings.
+
+Generating a pair of ssh keys:
+
+     ssh-keygen -t rsa –C “vitali_shulha@epam.com" (с папки .ssh добавляем общий код на gid)
+
+The public key (id_rsa) should be sent to the owner of the repository in order to obtain work rights. Or upload to profile settings in bitbucket / github / gitlab.
+
+Username and email settings:
+
+     git config --global user.name “Vitali Shulha“
+
+     git config --global user.email “vitali_Shulha@epam.com"
+	 ---------------------------------------------------
+	 
+	 cd /c/data/temp/
+	 
+	 pwd
+	 
+	 git clone git@github.com:Nyskelo/git-demo.git 
+	 
+	 ls
+	 
+	 cd git-demo/
+	 
+	 git remote -v
+	 ------------------------------------------------
+	 
+	 Pull from remote (added to local mashine)
+	 git pull
+	 
+	 ------------------------------------------------
+	 Inside .git folder
+	 ------------------------------------------------
+	 git show -s --pretty=raw 25367
+	 
+	 git ls-tree 546477
+	 
+	 git show 657584
+	 
+	 -----------------------------------------------
+	 Undoing changes
+	 -----------------------------------------------
+	 Working directory
+		git checkout --file.txt
+		git checkout .
+		git clean -xdf
+	
+	Staging area (index)
+		git reset -- file.txt
+		
+	Local branch
+		git reset HEAD^^ (HEAD~2)
+		git commit --amend -m "gfgffhfjf"
+		
+	Remote repository
+		git revert <sha1>
+	
+	-----------------------------------------------
+	Git reset
+	------------------------------------------------
+	Git reset     (git reset --mixed)
+	
+	git add      (git reset --soft)
+	
+	git commit
+					x > >>>  (git reset --hard)
+					
+	-------------------------------------------------
+	Git revert
+	-------------------------------------------------
+	git revert 464783
+	
+	--insert--
+	
+	add some text
+	
+	exit ESC
+	
+	:wq (do not change only end :q!)
+	
+	git push (send to revert - mirrov) to github
+	
+	--------------------------------------------------
+------------------------------------------------------
+	.gitignor
+	-------------------------------------------------------
+	
+	# no .log files
+	*.log
+	
+	#but do track error.log, even though you're ignoring .log files above
+	!error.log
+	
+	#only ignore the TODO file in the current directory, not subdir/TODO
+	/TODO
+	
+	# ignore doc/notes.txt, but not doc/server/arch.text
+	doc/*.txt
+	
+	# ignore all .pdf files in the doc/ directory
+	doc/**/*.pdf
+	--------------------------------------------------------
+
+Branching and merge
+_______________________________________________________________
+	
+	Fast-forward merge
+	-----------------------------------------------------------
+	git checkout -b newbranch
+	
+	git add .
+	git commit -m
+	
+	git checkout main
+	
+	git merge newbranch
+	
+	Non fast-forword merge
+	-----------------------------------------------------------
+	create one more commit in the end
+	we are in a main branch
+	
+		some change
+		
+		git add .
+		git commit -m
+	
+	git checkout newbranch
+	
+		some change 
+		
+		git add .
+		git commit -m
+	
+	git checkout main
+	
+	git merge newbranch
+	
+		Merge branch newbranch (green commit)
+		
+		:wq
+		
+		and the merge happens
+		
+	-----------------------------------------------------------
+	Conflict solving
+	-----------------------------------------------------------
+Solving conflict
+	
+	Abort merge
+		git merge --abort
+	
+	Resolve by selecting version
+		gid checkout --Xours --Xtheirs
+	
+	Resolve manually
+		git diff
+		
+	Undo merge
+		git revert 57778
+		
+	User merge tool
+	
+Avoid conflict
+	
+	short commits
+	no edits to whitespaces
+	merge often
+	-------------------------------------------------------------
+	Rebase
+	-------------------------------------------------------------
+	changing the base
+
+Integrating changes
+The second step is running git rebase. Rebase is a Git command which is used to integrate changes from one branch into another. The following command rebase the current branch from master (or choose any other branch like develop, suppose, the name of remote is origin, which is by default):
+
+	git rebase origin/master
+
+After git rebase, conflicts may occur. You should resolve them and add your changes by running git add command:
+
+	git add .
+
+	Do not run git commit after git add .
+
+After resolving the conflicts and adding the changes to the staging area, you must run git rebase with the --continue option:
+
+	git rebase --continue
+
+	INSERT
+	
+	ADD some comment
+
+	ESC
+
+	:wq
+
+If you want to cancel the rebasing rather than resolving the conflicts, you can run the following:
+	git rebase --abort
+
+
+	
+	------------------------------------------------------------
+	Cherry-pick
+	------------------------------------------------------------
+	point look
+	
+	------------------------------------------------------------
+	Tags
+	------------------------------------------------------------
+	
+	Mark commit with tag
+		git tag version1
+		
+	View tags
+		git tag --list
+		
+	Push
+		git push --tags
+		
+	Check it out 
+		git checkout version1
+		
+	------------------------------------------------------------
+	Stashing
+	------------------------------------------------------------
+	Save working directory
+		git stash save "description"
+		
+	View stashes
+		git stash list
+		
+	Bring them back
+		git stash pop (and remove from stash)
+		git stash apply (leave stash)
+		
+	Remove
+		git stash drop (clear)
+		
+	-------------------------------------------------------------
+	Remotes
+	-------------------------------------------------------------
+	
+	Add
+		git remote add <name> <url>
+		git remote add origin git@github.com:user/repo.git
+		
+		git push
+		
+			git push --set-upstream origin main
+		
+	View
+		git remote show <name>
+		git remote -v
+		
+	Delete
+		git remote remove origin
+		
+	--------------------------------------------------------------
+	
+Branching strategies
+__________________________________________________________________
+
+	
+	Centralized strategy (Master Branch)
+	
+	Feature-branch workflow 
+		(Here we create a branch, create some 
+		fish in it, and then we merge the branch back into the upstream 
+		into the branch we had initially separated from. In this case, 
+		it's master. )
+	
+	Gitflow
+		A successful Git branching model
+		https://nvie.com/posts/a-successful-git-branching-model/
+		git flow is a system where we use a different branch. 
+		The feature branch but reserve the right to create some 
+		additional specific branches for specific tasks.
+		
+	
+	Integration manager workflow
+		You can commit code, meaning we can push to wander processor 
+		and pull from another one. That is the concept at the basis 
+		of the Workflow Integration Manager. 
+		
+	Ditator and Lieutenants workflow
+		
+	Forking workflow (Forks Fork, pull request request or merge ) 
+	
+______________________________________________________________________
+
+
+Extras
+----------------------------------------------------------------------
+	git config --global user.name “Vitali Shulha“
+
+    git config --global user.email “vitali_Shulha@epam.com"
+	
+	git config --global core.editor "'C:/Program files (x86)/Notepad++.exe'"
+	
+	git blame
+	
+	git bisect
+	
+	git log --pretty=oneline
+	
+	git log --pretty=format:"%h %s" -graph
+	
+	git config --global alias.last 'log -1 HEAD'
+	
+	git last
+	
+	git log master..experiment
+	
+	git filter-branch --tree-filter 'rm -f password.txt' HEAD
+	
+	git rerere
+	
+	git submodule
+	
+	-----------------------------------------------------------------
+	
+	Commands that may be useful to you:
+
+echo
+
+cd
+
+cat
+
+vi
+		
+	
+	
